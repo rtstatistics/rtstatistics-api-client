@@ -75,4 +75,7 @@ class AbstractApiClient extends AbstractRestClient {
 		return HttpHeaders.readOnlyHttpHeaders(headers);
 	}
 	
+	public void setBaseUrl(String baseUrl){
+		this.baseUrl = baseUrl;
+	}
 }
