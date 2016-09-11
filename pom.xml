@@ -3,7 +3,7 @@
 
 	<groupId>com.rtstatistics</groupId>
 	<artifactId>api-client</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>rtstatistics-api-client</name>
@@ -72,10 +72,6 @@
 				<exclusion>
 					<groupId>org.springframework</groupId>
 					<artifactId>spring-context</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-beans</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
