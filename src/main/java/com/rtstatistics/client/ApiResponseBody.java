@@ -65,20 +65,6 @@ public class ApiResponseBody<T> implements ApiErrorInfoProvider{
 		this.error = new ErrorInfo(httpStatus.getReasonPhrase(), errorMsg, null);
 	}
 
-	public ApiResponseBody(Throwable e, String incidentId){
-		this();
-		String type = e.getClass().getSimpleName();
-		if (type.endsWith("Exception")){
-			type = StringUtils.removeEnd(type, "Exception");
-		}
-		if (type.endsWith("Error")){
-			type = StringUtils.removeEnd(type, "Error");
-		}
-		type = StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(type), ' ');
-		this.error = new ErrorInfo(type, e.getMessage(), incidentId);
-	}
-	
-
 	public ApiResponseBody(T result){
 		this();
 		this.result = result;
