@@ -3,10 +3,17 @@
  */
 package com.rtstatistics.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URIBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+
+import net.sf.jabb.cjtsd.PlainCJTSD;
 
 /**
  * Client for accessing rtstatistics.com Data API.
@@ -19,6 +26,7 @@ public class DataApiClient extends AbstractApiClient {
 	String defaultDatasetId;
 	HttpHeaders defaultSendHeaders;
 	HttpHeaders defaultQueryHeaders;
+	String defaultStatisticsId;
 	
 	public DataApiClient(){
 		super();
@@ -26,11 +34,12 @@ public class DataApiClient extends AbstractApiClient {
 		this.initializeRestTemplate();
 	}
 
-	public DataApiClient(String defaultDatasetId, String defaultSendKey, String defaultQueryKey){
+	public DataApiClient(String defaultDatasetId, String defaultSendKey, String defaultQueryKey, String defaultStatisticsId){
 		this();
 		setDefaultDatasetId(defaultDatasetId);
 		setDefaultSendKey(defaultSendKey);
 		setDefaultQueryKey(defaultQueryKey);
+		setDefaultStatisticsId(defaultStatisticsId);
 	}
 
 	public void setDefaultDatasetId(String defaultDatasetId){
@@ -42,7 +51,11 @@ public class DataApiClient extends AbstractApiClient {
 	}
 
 	public void setDefaultQueryKey(String defaultQueryKey) {
-		this.defaultQueryHeaders = buildHeaders(ACCEPT_AND_OFFER_JSON, defaultQueryKey);
+		this.defaultQueryHeaders = buildHeaders(ACCEPT_JSON, defaultQueryKey);
+	}
+	
+	public void setDefaultStatisticsId(String defaultStatisticsId){
+		this.defaultStatisticsId = defaultStatisticsId;
 	}
 	
 	/**
@@ -80,5 +93,97 @@ public class DataApiClient extends AbstractApiClient {
 		return ids;
 	}
 
+	/**
+	 * Query statistics detail using the default statistics ID and dataset query key
+	 * @param parameters	all parameters, can be of type {@link QueryParameters}
+	 * @return	statistics detail
+	 */
+	public PlainCJTSD query(Map<String, String> parameters){
+		return query(null, parameters, null);
+	}
+
+	/**
+	 * Query statistics detail
+	 * @param statisticsId	Statistics ID
+	 * @param parameters	all parameters, can be of type {@link QueryParameters}
+	 * @param queryKey		Query key of the dataset
+	 * @return	statistics detail
+	 */
+	public PlainCJTSD query(String statisticsId, Map<String, String> parameters, String queryKey){
+		if (statisticsId == null){
+			statisticsId = defaultStatisticsId;
+		}
+		
+		HttpHeaders headers = queryKey == null ? defaultQueryHeaders : buildHeaders(ACCEPT_JSON, queryKey);
+		
+		URIBuilder builder = uriBuilder("/statistics/" + statisticsId + "/detail");
+		if (parameters != null){
+			for (Map.Entry<String, String> entry: parameters.entrySet()){
+				if (entry.getValue() != null){
+					builder.addParameter(entry.getKey(), entry.getValue());
+				}
+			}
+		}
+		
+		ResponseEntity<ApiResponseBody<PlainCJTSD>> response = this.restTemplate.exchange(buildUri(builder), HttpMethod.GET, 
+				new HttpEntity<Object>(headers), RESPONSE_BODY_CJTSD);
+		PlainCJTSD cjtsd =response.getBody().getResult();
+		return cjtsd;
+	}
+	
+	public static class QueryParameters extends HashMap<String, String>{
+		private static final long serialVersionUID = -159377479871209375L;
+		
+		public static final String COLUMNS = "_columns";
+		public static final String FROM = "_from";
+		public static final String TO = "_to";
+		public static final String PERIOD = "_period";
+		public static final String ZONE = "_zone";
+		public static final String ABSENT = "_absent";
+		
+		public QueryParameters setColumns(String... columns){
+			this.put(COLUMNS, StringUtils.join(columns, ','));
+			return this;
+		}
+		
+		public QueryParameters setFrom(String from){
+			this.put(FROM, from);
+			return this;
+		}
+
+		public QueryParameters setTo(String to){
+			this.put(TO, to);
+			return this;
+		}
+
+		public QueryParameters setPeriod(String period){
+			this.put(PERIOD, period);
+			return this;
+		}
+
+		public QueryParameters setPeriod(int amount, String unit){
+			this.put(PERIOD, Integer.toString(amount) + " " + unit);
+			return this;
+		}
+
+		public QueryParameters setTimeZone(String timeZone){
+			this.put(ZONE, timeZone);
+			return this;
+		}
+		
+		public QueryParameters setPeriodAndTimeZone(int amount, String unit, String timeZone){
+			return this.setPeriod(amount, unit).setTimeZone(timeZone);
+		}
+
+		public QueryParameters setAbsentAsEmpty(boolean absentAsEmpty){
+			if (absentAsEmpty){
+				this.put(ABSENT, "empty");
+			}else{
+				this.remove(ABSENT);
+			}
+			return this;
+		}
+
+	}
 
 }

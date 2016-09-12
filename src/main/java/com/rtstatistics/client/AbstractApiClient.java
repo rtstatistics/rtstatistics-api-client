@@ -16,6 +16,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import net.sf.jabb.cjtsd.PlainCJTSD;
 import net.sf.jabb.spring.rest.AbstractRestClient;
 import net.sf.jabb.spring.rest.CustomResponseErrorHandler;
 import net.sf.jabb.util.parallel.BackoffStrategies;
@@ -35,6 +36,7 @@ class AbstractApiClient extends AbstractRestClient {
 	protected int retryIntervalMaxSeconds = 60;
 	
 	static protected final ParameterizedTypeReference<ApiResponseBody<String[]>> RESPONSE_BODY_IDS = new ParameterizedTypeReference<ApiResponseBody<String[]>>(){};
+	static protected final ParameterizedTypeReference<ApiResponseBody<PlainCJTSD>> RESPONSE_BODY_CJTSD = new ParameterizedTypeReference<ApiResponseBody<PlainCJTSD>>(){};
 
 	@Override
 	protected HttpRequestRetryHandler buildRequestRetryHandler(){
