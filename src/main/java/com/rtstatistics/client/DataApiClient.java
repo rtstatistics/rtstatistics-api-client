@@ -165,7 +165,27 @@ public class DataApiClient extends AbstractApiClient {
 			this.put(PERIOD, Integer.toString(amount) + " " + unit);
 			return this;
 		}
-
+		
+		public QueryParameters setPeriodOfMinutes(int amount){
+			return this.setPeriod(amount, "MINUTE");
+		}
+		
+		public QueryParameters setPeriodOfHours(int amount){
+			return this.setPeriod(amount, "HOUR");
+		}
+		
+		public QueryParameters setPeriodOfDays(int amount){
+			return this.setPeriod(amount, "DAY");
+		}
+		
+		public QueryParameters setPeriodOfMonths(int amount){
+			return this.setPeriod(amount, "MONTH");
+		}
+		
+		public QueryParameters setPeriodOfYears(int amount){
+			return this.setPeriod(amount, "YEAR");
+		}
+		
 		public QueryParameters setTimeZone(String timeZone){
 			this.put(ZONE, timeZone);
 			return this;
