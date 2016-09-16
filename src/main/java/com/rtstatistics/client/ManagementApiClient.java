@@ -5,6 +5,8 @@ package com.rtstatistics.client;
 
 import org.springframework.http.HttpHeaders;
 
+import com.rtstatistics.client.model.Dataset;
+
 /**
  * Client for accessing rtstatistics.com Management API.
  * @see {@link AbstractApiClient} for default behaviors. 
@@ -32,5 +34,66 @@ public class ManagementApiClient extends AbstractApiClient {
 		this.defaultNoContentHeaders = buildHeaders(ACCEPT_JSON, key);
 	}
 	
+	/***************	/datasets	****************/
+	
+	/**
+	 * Get all datasets
+	 * @return	all datasets belonging to the organization
+	 * @throws ApiClientErrorException	if got 4xx error
+	 * @throws ApiServerErrorException	if got 5xx error
+	 */
+	public Dataset[] getAllDatasets() throws ApiClientErrorException, ApiServerErrorException{
+		HttpHeaders headers = defaultHeaders;
+		
+		return getForObject(buildUri("/datasets"), headers, Dataset[].class);
+	}
+	
+	/**
+	 * Create a new dataset
+	 * @param dataset	The dataset to be created. Its id field will be ignored.
+	 * @return	an object with only the id field gives you the ID of the newly created dataset
+	 * @throws ApiClientErrorException	if got 4xx error
+	 * @throws ApiServerErrorException	if got 5xx error
+	 */
+	public Dataset createDataset(Dataset dataset) throws ApiClientErrorException, ApiServerErrorException{
+		HttpHeaders headers = defaultHeaders;
+		
+		return postForObject(buildUri("/datasets"), dataset, headers, Dataset.class);
+	}
+	
+	/**
+	 * Delete a dataset. Please note that all the statistics and their data belonging to the dataset will also be deleted.
+	 * @param id	ID of the dataset
+	 * @throws ApiClientErrorException	if got 4xx error
+	 * @throws ApiServerErrorException	if got 5xx error
+	 */
+	public void deleteDataset(String id) throws ApiClientErrorException, ApiServerErrorException{
+		HttpHeaders headers = defaultHeaders;
 
+		delete(buildUri("/datasets/" + id), headers);
+	}
+	
+	/**
+	 * Get detailed information of a dataset.
+	 * @param id	ID of the dataset
+	 * @return	The dataset with full detail
+	 * @throws ApiClientErrorException	if got 4xx error
+	 * @throws ApiServerErrorException	if got 5xx error
+	 */
+	public Dataset getDataset(String id) throws ApiClientErrorException, ApiServerErrorException{
+		HttpHeaders headers = defaultHeaders;
+		
+		return getForObject(buildUri("/datasets/" + id), headers, Dataset.class);
+	}
+	
+	/**
+	 * Partially update a dataset. 
+	 * @param id	ID of the dataset
+	 * @param dataset	Updates. Its id field will be ignored. Those fields with null values will not be changed.
+	 */
+	public void updateDataset(String id, Dataset dataset){
+		HttpHeaders headers = defaultHeaders;
+
+		patch(buildUri("/datasets/" + id), dataset, headers);
+	}
 }

@@ -47,7 +47,7 @@
 		<dependency>
 			<groupId>net.sf.jabb</groupId>
 			<artifactId>jabb-core</artifactId>
-			<version>1.0.117</version>
+			<version>1.0.118</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>commons-logging</artifactId>

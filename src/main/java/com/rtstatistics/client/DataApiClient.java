@@ -86,16 +86,17 @@ public class DataApiClient extends AbstractApiClient {
 		
 		HttpHeaders headers = sendKey == null ? defaultSendHeaders : buildHeaders(ACCEPT_AND_OFFER_JSON, sendKey);
 		
-		String[] ids = this.restTemplate.postForObject(buildUri("/datasets/" + datasetId + "/items"), new HttpEntity<Object>(data, headers), String[].class);
-		return ids;
+		return postForObject(buildUri("/datasets/" + datasetId + "/items"), data, headers, String[].class);
 	}
 
 	/**
 	 * Query statistics detail using the default statistics ID and dataset query key
 	 * @param parameters	all parameters, can be of type {@link QueryParameters}
 	 * @return	statistics detail
+	 * @throws ApiClientErrorException	if got 4xx error
+	 * @throws ApiServerErrorException	if got 5xx error
 	 */
-	public PlainCJTSD query(Map<String, String> parameters){
+	public PlainCJTSD query(Map<String, String> parameters) throws ApiClientErrorException, ApiServerErrorException{
 		return query(null, parameters, null);
 	}
 
@@ -105,8 +106,10 @@ public class DataApiClient extends AbstractApiClient {
 	 * @param parameters	all parameters, can be of type {@link QueryParameters}
 	 * @param queryKey		Query key of the dataset
 	 * @return	statistics detail
+	 * @throws ApiClientErrorException	if got 4xx error
+	 * @throws ApiServerErrorException	if got 5xx error
 	 */
-	public PlainCJTSD query(String statisticsId, Map<String, String> parameters, String queryKey){
+	public PlainCJTSD query(String statisticsId, Map<String, String> parameters, String queryKey) throws ApiClientErrorException, ApiServerErrorException{
 		if (statisticsId == null){
 			statisticsId = defaultStatisticsId;
 		}
@@ -122,9 +125,7 @@ public class DataApiClient extends AbstractApiClient {
 			}
 		}
 		
-		PlainCJTSD cjtsd = this.restTemplate.exchange(buildUri(builder), HttpMethod.GET, new HttpEntity<Object>(headers), PlainCJTSD.class)
-				.getBody();
-		return cjtsd;
+		return getForObject(buildUri(builder), headers, PlainCJTSD.class);
 	}
 	
 	public static class QueryParameters extends HashMap<String, String>{
