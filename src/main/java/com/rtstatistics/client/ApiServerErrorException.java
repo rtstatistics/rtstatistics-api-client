@@ -11,6 +11,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpServerErrorException;
 
+import com.rtstatistics.client.model.ErrorDetail;
+
 /**
  * Exception thrown when an HTTP 5xx is received.
  * 

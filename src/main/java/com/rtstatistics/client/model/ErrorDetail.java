@@ -1,4 +1,4 @@
-package com.rtstatistics.client;
+package com.rtstatistics.client.model;
 
 import org.springframework.http.HttpStatus;
 
