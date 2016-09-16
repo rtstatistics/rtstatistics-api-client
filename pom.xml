@@ -109,12 +109,6 @@
 			<artifactId>httpclient</artifactId>
 			<version>4.5.2</version>
 		</dependency>
-		<dependency>
-			<groupId>io.fastjson</groupId>
-			<artifactId>boon</artifactId>
-			<version>0.33</version>
-			<optional>true</optional>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
