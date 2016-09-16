@@ -41,62 +41,72 @@ public class Statistics implements Serializable{
 	public String getDatasetId() {
 		return datasetId;
 	}
-	public void setDatasetId(String datasetId) {
+	public Statistics setDatasetId(String datasetId) {
 		this.datasetId = datasetId;
+		return this;
 	}
 	public String getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public Statistics setId(String id) {
 		this.id = id;
+		return this;
 	}
 	public Boolean getIncludeCountDistinct() {
 		return includeCountDistinct;
 	}
-	public void setIncludeCountDistinct(Boolean includeCountDistinct) {
+	public Statistics setIncludeCountDistinct(Boolean includeCountDistinct) {
 		this.includeCountDistinct = includeCountDistinct;
+		return this;
 	}
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
+	public Statistics setName(String name) {
 		this.name = name;
+		return this;
 	}
 	public String getPeriodsId() {
 		return periodsId;
 	}
-	public void setPeriodsId(String periodsId) {
+	public Statistics setPeriodsId(String periodsId) {
 		this.periodsId = periodsId;
+		return this;
 	}
 	public String getTimestampFieldFormat() {
 		return timestampFieldFormat;
 	}
-	public void setTimestampFieldFormat(String timestampFieldFormat) {
+	public Statistics setTimestampFieldFormat(String timestampFieldFormat) {
 		this.timestampFieldFormat = timestampFieldFormat;
+		return this;
 	}
 	public String getTimestampFieldName() {
 		return timestampFieldName;
 	}
-	public void setTimestampFieldName(String timestampFieldName) {
+	public Statistics setTimestampFieldName(String timestampFieldName) {
 		this.timestampFieldName = timestampFieldName;
+		return this;
 	}
 	public String getTimestampFieldZone() {
 		return timestampFieldZone;
 	}
-	public void setTimestampFieldZone(String timestampFieldZone) {
+	public Statistics setTimestampFieldZone(String timestampFieldZone) {
 		this.timestampFieldZone = timestampFieldZone;
+		return this;
 	}
 	public String getValueField() {
 		return valueField;
 	}
-	public void setValueField(String valueField) {
+	public Statistics setValueField(String valueField) {
 		this.valueField = valueField;
+		return this;
 	}
 	public String[][] getKeyFields() {
 		return keyFields;
 	}
-	public void setKeyFields(String[][] keyFields) {
+	public Statistics setKeyFields(String[][] keyFields) {
 		this.keyFields = keyFields;
+		return this;
 	}
 
 }

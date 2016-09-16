@@ -63,11 +63,12 @@ public class StatisticsPeriod implements Serializable{
 		this.configuration = new Configuration(keepWithinMinutes);
 	}
 	
-	public void addUpperLevelPeriod(StatisticsPeriod upperLevelPeriod) {
+	public StatisticsPeriod addUpperLevelPeriod(StatisticsPeriod upperLevelPeriod) {
 		if (upperLevelPeriods == null){
 			upperLevelPeriods = new ArrayList<StatisticsPeriod>();
 		}
 		upperLevelPeriods.add(upperLevelPeriod);
+		return this;
 	}
 
 

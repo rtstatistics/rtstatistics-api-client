@@ -27,12 +27,13 @@ public class StatisticsPeriodsHierarchy implements Serializable {
 		this.name = name;
 	}
 	
-	public void addStatisticsPeriod(StatisticsPeriod statisticsPeriod){
+	public StatisticsPeriodsHierarchy addStatisticsPeriod(StatisticsPeriod statisticsPeriod){
 		if (periods == null){
 			periods = new ArrayList<StatisticsPeriod>();
 		}
 		
 		periods.add(statisticsPeriod);
+		return this;
 	}
 	
 	public String getId() {
