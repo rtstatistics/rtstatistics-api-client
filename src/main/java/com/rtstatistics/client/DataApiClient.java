@@ -11,7 +11,6 @@ import org.apache.http.client.utils.URIBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 
 import net.sf.jabb.cjtsd.PlainCJTSD;
 
@@ -87,9 +86,7 @@ public class DataApiClient extends AbstractApiClient {
 		
 		HttpHeaders headers = sendKey == null ? defaultSendHeaders : buildHeaders(ACCEPT_AND_OFFER_JSON, sendKey);
 		
-		ResponseEntity<ApiResponseBody<String[]>> response = this.restTemplate.exchange(buildUri("/datasets/" + datasetId + "/items"), HttpMethod.POST, 
-				new HttpEntity<Object>(data, headers), RESPONSE_BODY_IDS);
-		String[] ids =response.getBody().getResult();
+		String[] ids = this.restTemplate.postForObject(buildUri("/datasets/" + datasetId + "/items"), new HttpEntity<Object>(data, headers), String[].class);
 		return ids;
 	}
 
@@ -125,9 +122,8 @@ public class DataApiClient extends AbstractApiClient {
 			}
 		}
 		
-		ResponseEntity<ApiResponseBody<PlainCJTSD>> response = this.restTemplate.exchange(buildUri(builder), HttpMethod.GET, 
-				new HttpEntity<Object>(headers), RESPONSE_BODY_CJTSD);
-		PlainCJTSD cjtsd =response.getBody().getResult();
+		PlainCJTSD cjtsd = this.restTemplate.exchange(buildUri(builder), HttpMethod.GET, new HttpEntity<Object>(headers), PlainCJTSD.class)
+				.getBody();
 		return cjtsd;
 	}
 	

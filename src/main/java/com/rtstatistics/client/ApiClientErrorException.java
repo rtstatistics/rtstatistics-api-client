@@ -17,11 +17,11 @@ import org.springframework.web.client.HttpClientErrorException;
  * @author James Hu (Zhengmao Hu)
  *
  */
-public class ApiClientErrorException extends HttpClientErrorException implements ApiErrorInfoProvider{
+public class ApiClientErrorException extends HttpClientErrorException implements ErrorDetailSupplier{
 	private static final long serialVersionUID = 6815159411070102480L;
 	private static final Logger logger = LoggerFactory.getLogger(ApiClientErrorException.class);
 
-	protected ApiResponseBody.ErrorInfo error;
+	protected ErrorDetail error;
 	
 	/**
 	 * Construct a new instance of {@code ApiHttpClientErrorException} based on an
@@ -35,21 +35,24 @@ public class ApiClientErrorException extends HttpClientErrorException implements
 	public ApiClientErrorException(HttpStatus statusCode, String statusText, HttpHeaders responseHeaders,
 			byte[] responseBody, Charset responseCharset) {
 		super(statusCode, statusText, responseHeaders, responseBody, responseCharset);
-		populateErrorInfo(responseBody);
+		populateErrorInfo(statusCode, responseBody);
 	}
 	
-	protected void populateErrorInfo(byte[] body){
+	protected void populateErrorInfo(HttpStatus statusCode, byte[] body){
 		if (body != null){
 			try {
-				error = Jackson2.objectMapper.readValue(body, ApiResponseBody.class).getError();
+				error = Jackson2.objectMapper.readValue(body, ErrorDetail.class);
 			} catch (Exception e) {
-				logger.warn("Unabled to retrieve ErrorInfo: []", body);
+				logger.warn("Unabled to retrieve error detail: {}", body);
 			}
+		}
+		if (error == null){
+			error = new ErrorDetail(statusCode);
 		}
 	}
 
 	@Override
-	public ApiResponseBody.ErrorInfo getError() {
+	public ErrorDetail getError() {
 		return error;
 	}
 
