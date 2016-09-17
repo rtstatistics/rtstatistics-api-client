@@ -86,7 +86,7 @@ public class DataApiClient extends AbstractApiClient {
 		
 		HttpHeaders headers = sendKey == null ? defaultSendHeaders : buildHeaders(ACCEPT_AND_OFFER_JSON, sendKey);
 		
-		return postForObject(buildUri("/datasets/" + datasetId + "/items"), data, headers, String[].class);
+		return post("/datasets/" + datasetId + "/items", data, headers, String[].class);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class DataApiClient extends AbstractApiClient {
 			}
 		}
 		
-		return getForObject(buildUri(builder), headers, PlainCJTSD.class);
+		return get(buildUri(builder), headers, PlainCJTSD.class);
 	}
 	
 	public static class QueryParameters extends HashMap<String, String>{

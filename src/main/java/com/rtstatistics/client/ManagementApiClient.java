@@ -3,6 +3,7 @@
  */
 package com.rtstatistics.client;
 
+import com.rtstatistics.client.model.DatasetKeys;
 import org.springframework.http.HttpHeaders;
 
 import com.rtstatistics.client.model.Dataset;
@@ -45,7 +46,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	public Dataset[] getAllDatasets() throws ApiClientErrorException, ApiServerErrorException{
 		HttpHeaders headers = defaultHeaders;
 		
-		return getForObject(buildUri("/datasets"), headers, Dataset[].class);
+		return get("/datasets", headers, Dataset[].class);
 	}
 	
 	/**
@@ -58,7 +59,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	public Dataset createDataset(Dataset dataset) throws ApiClientErrorException, ApiServerErrorException{
 		HttpHeaders headers = defaultHeaders;
 		
-		return postForObject(buildUri("/datasets"), dataset, headers, Dataset.class);
+		return post("/datasets", dataset, headers, Dataset.class);
 	}
 	
 	/**
@@ -70,7 +71,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	public void deleteDataset(String id) throws ApiClientErrorException, ApiServerErrorException{
 		HttpHeaders headers = defaultHeaders;
 
-		delete(buildUri("/datasets/" + id), headers);
+		delete("/datasets/" + id, headers);
 	}
 	
 	/**
@@ -83,7 +84,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	public Dataset getDataset(String id) throws ApiClientErrorException, ApiServerErrorException{
 		HttpHeaders headers = defaultHeaders;
 		
-		return getForObject(buildUri("/datasets/" + id), headers, Dataset.class);
+		return get("/datasets/" + id, headers, Dataset.class);
 	}
 	
 	/**
@@ -94,6 +95,25 @@ public class ManagementApiClient extends AbstractApiClient {
 	public void updateDataset(String id, Dataset dataset){
 		HttpHeaders headers = defaultHeaders;
 
-		patch(buildUri("/datasets/" + id), dataset, headers);
+		patch("/datasets/" + id, dataset, headers);
 	}
+
+	public DatasetKeys getDatasetKeys(String id)  throws ApiClientErrorException, ApiServerErrorException{
+		HttpHeaders headers = defaultHeaders;
+
+		return get("/datasets/" + id + "/keys", headers, DatasetKeys.class);
+	}
+
+	/***************	/fields	****************/
+
+
+
+	/***************	/organizations	****************/
+
+	/***************	/periods	****************/
+
+	/***************	/statistics	****************/
+
+	/***************	/users	****************/
+
 }
