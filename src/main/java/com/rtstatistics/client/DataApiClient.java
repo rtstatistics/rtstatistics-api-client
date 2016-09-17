@@ -101,6 +101,18 @@ public class DataApiClient extends AbstractApiClient {
 	}
 
 	/**
+	 * Query statistics detail using the default dataset query key
+	 * @param statisticsId	Statistics ID
+	 * @param parameters	all parameters, can be of type {@link QueryParameters}
+	 * @return	statistics detail
+	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
+	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
+	 */
+	public PlainCJTSD query(String statisticsId, Map<String, String> parameters) throws ApiClientErrorException, ApiServerErrorException{
+		return query(statisticsId, parameters, null);
+	}
+
+	/**
 	 * Query statistics detail
 	 * @param statisticsId	Statistics ID
 	 * @param parameters	all parameters, can be of type {@link QueryParameters}
