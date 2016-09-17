@@ -42,7 +42,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public Dataset[] getAllDatasets() throws ApiClientErrorException, ApiServerErrorException{
-		HttpHeaders headers = defaultHeaders;
+		HttpHeaders headers = defaultNoContentHeaders;
 		
 		return get("/datasets", headers, Dataset[].class);
 	}
@@ -67,7 +67,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public void deleteDataset(String id) throws ApiClientErrorException, ApiServerErrorException{
-		HttpHeaders headers = defaultHeaders;
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		delete("/datasets/" + id, headers);
 	}
@@ -80,7 +80,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public Dataset getDataset(String id) throws ApiClientErrorException, ApiServerErrorException{
-		HttpHeaders headers = defaultHeaders;
+		HttpHeaders headers = defaultNoContentHeaders;
 		
 		return get("/datasets/" + id, headers, Dataset.class);
 	}
@@ -106,7 +106,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public DatasetKeys getDatasetKeys(String id) throws ApiClientErrorException, ApiServerErrorException{
-		HttpHeaders headers = defaultHeaders;
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		return get("/datasets/" + id + "/keys", headers, DatasetKeys.class);
 	}
@@ -120,7 +120,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public SingleKey regenerateDatasetKey(String id, String oldKey) throws ApiClientErrorException, ApiServerErrorException{
-		HttpHeaders headers = defaultHeaders;
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		return put("/datasets/" + id + "/keys/" + oldKey, null, headers, SingleKey.class);
 	}
@@ -133,7 +133,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public ReceivedDataItem[] getDatasetRecentDataItems(String datasetId) throws ApiClientErrorException, ApiServerErrorException{
-		HttpHeaders headers = defaultHeaders;
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		return get("/datasets/" + datasetId + "/recent", headers, ReceivedDataItem[].class);
 	}
@@ -147,7 +147,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public Statistics[] getDatasetStatistics(String datasetId) throws ApiClientErrorException, ApiServerErrorException{
-		HttpHeaders headers = defaultHeaders;
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		return get("/datasets/" + datasetId + "/statistics", headers, Statistics[].class);
 	}
@@ -161,8 +161,8 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
-	public Field[] getFields(String datasetId) throws ApiClientErrorException, ApiServerErrorException{
-		HttpHeaders headers = defaultHeaders;
+	public Field[] getDatasetFields(String datasetId) throws ApiClientErrorException, ApiServerErrorException{
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		return get("/datasets/" + datasetId + "/fields", headers, Field[].class);
 	}
@@ -174,7 +174,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
-	public void createField(String datasetId, Field field) throws ApiClientErrorException, ApiServerErrorException{
+	public void createDatasetField(String datasetId, Field field) throws ApiClientErrorException, ApiServerErrorException{
 		HttpHeaders headers = defaultHeaders;
 
 		post("/datasets/" + datasetId + "/fields", field, headers, Void.class);
@@ -187,8 +187,8 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
-	public void deleteField(String datasetId, String fieldName) throws ApiClientErrorException, ApiServerErrorException{
-		HttpHeaders headers = defaultHeaders;
+	public void deleteDatasetField(String datasetId, String fieldName) throws ApiClientErrorException, ApiServerErrorException{
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		delete("/datasets/" + datasetId + "/fields/" + fieldName, headers);
 	}
@@ -201,8 +201,8 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
-	public Field getField(String datasetId, String fieldName) throws ApiClientErrorException, ApiServerErrorException {
-		HttpHeaders headers = defaultHeaders;
+	public Field getDatasetField(String datasetId, String fieldName) throws ApiClientErrorException, ApiServerErrorException {
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		return get("/datasets/" + datasetId + "/fields/" + fieldName, headers, Field.class);
 	}
@@ -215,7 +215,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
-	public void updateField(String datasetId, String fieldName, Field field) throws ApiClientErrorException, ApiServerErrorException {
+	public void updateDatasetField(String datasetId, String fieldName, Field field) throws ApiClientErrorException, ApiServerErrorException {
 		HttpHeaders headers = defaultHeaders;
 
 		patch("/datasets/" + datasetId + "/fields/" + fieldName, field, headers);
@@ -232,7 +232,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public StatisticsPeriodsHierarchy[] getAllPeriods() throws ApiClientErrorException, ApiServerErrorException {
-		HttpHeaders headers = defaultHeaders;
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		return get("/periods", headers, StatisticsPeriodsHierarchy[].class);
 	}
@@ -257,7 +257,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public void deletePeriods(String id) throws ApiClientErrorException, ApiServerErrorException {
-		HttpHeaders headers = defaultHeaders;
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		delete("/periods/" + id, headers);
 	}
@@ -270,7 +270,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public StatisticsPeriodsHierarchy getPeriods(String id) throws ApiClientErrorException, ApiServerErrorException {
-		HttpHeaders headers = defaultHeaders;
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		return get("/periods/" + id, headers, StatisticsPeriodsHierarchy.class);
 	}
@@ -298,7 +298,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public Statistics[] getAllStatistics() throws ApiClientErrorException, ApiServerErrorException {
-		HttpHeaders headers = defaultHeaders;
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		return get("/statistics", headers, Statistics[].class);
 	}
@@ -323,7 +323,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public void deleteStatistics(String id) throws ApiClientErrorException, ApiServerErrorException {
-		HttpHeaders headers = defaultHeaders;
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		delete("/statistics/" + id, headers);
 	}
@@ -336,7 +336,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public Statistics getStatistics(String id) throws ApiClientErrorException, ApiServerErrorException{
-		HttpHeaders headers = defaultHeaders;
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		return get("/statistics/" + id, headers, Statistics.class);
 	}
@@ -349,7 +349,7 @@ public class ManagementApiClient extends AbstractApiClient {
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public void updateStatistics(String id, Statistics statistics) throws ApiClientErrorException, ApiServerErrorException {
-		HttpHeaders headers = defaultHeaders;
+		HttpHeaders headers = defaultNoContentHeaders;
 
 		patch("/statistics/" + id, statistics, headers);
 	}
