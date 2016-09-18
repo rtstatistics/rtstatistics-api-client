@@ -11,7 +11,6 @@ import org.apache.http.client.utils.URIBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 
 import net.sf.jabb.cjtsd.PlainCJTSD;
 
@@ -63,8 +62,8 @@ public class DataApiClient extends AbstractApiClient {
 	 * Default datasetId and API key set by {@link #setDefaultDatasetId(String)} and {@link #setDefaultSendKey(String)} will be used.
 	 * @param data			data item or data items (if it is an array or instance of Collection)
 	 * @return				IDs of the data items successfully appended to the dataset 
-	 * @throws ApiClientErrorException	if got 4xx error
-	 * @throws ApiServerErrorException	if got 5xx error
+	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
+	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public String[] send(Object data) throws ApiClientErrorException, ApiServerErrorException{
 		return send(null, data, null);
@@ -77,8 +76,8 @@ public class DataApiClient extends AbstractApiClient {
 	 * @param sendKey		API key for sending to the specified dataset, if it is null, 
 	 * 						API key set through {@link #setDefaultSendKey(String)} will be used.
 	 * @return				IDs of the data items successfully appended to the dataset 
-	 * @throws ApiClientErrorException	if got 4xx error
-	 * @throws ApiServerErrorException	if got 5xx error
+	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
+	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public String[] send(String datasetId, Object data, String sendKey) throws ApiClientErrorException, ApiServerErrorException{
 		if (datasetId == null){
@@ -87,19 +86,30 @@ public class DataApiClient extends AbstractApiClient {
 		
 		HttpHeaders headers = sendKey == null ? defaultSendHeaders : buildHeaders(ACCEPT_AND_OFFER_JSON, sendKey);
 		
-		ResponseEntity<ApiResponseBody<String[]>> response = this.restTemplate.exchange(buildUri("/datasets/" + datasetId + "/items"), HttpMethod.POST, 
-				new HttpEntity<Object>(data, headers), RESPONSE_BODY_IDS);
-		String[] ids =response.getBody().getResult();
-		return ids;
+		return post("/datasets/" + datasetId + "/items", data, headers, String[].class);
 	}
 
 	/**
 	 * Query statistics detail using the default statistics ID and dataset query key
 	 * @param parameters	all parameters, can be of type {@link QueryParameters}
 	 * @return	statistics detail
+	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
+	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
-	public PlainCJTSD query(Map<String, String> parameters){
+	public PlainCJTSD query(Map<String, String> parameters) throws ApiClientErrorException, ApiServerErrorException{
 		return query(null, parameters, null);
+	}
+
+	/**
+	 * Query statistics detail using the default dataset query key
+	 * @param statisticsId	Statistics ID
+	 * @param parameters	all parameters, can be of type {@link QueryParameters}
+	 * @return	statistics detail
+	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
+	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
+	 */
+	public PlainCJTSD query(String statisticsId, Map<String, String> parameters) throws ApiClientErrorException, ApiServerErrorException{
+		return query(statisticsId, parameters, null);
 	}
 
 	/**
@@ -108,8 +118,10 @@ public class DataApiClient extends AbstractApiClient {
 	 * @param parameters	all parameters, can be of type {@link QueryParameters}
 	 * @param queryKey		Query key of the dataset
 	 * @return	statistics detail
+	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
+	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
-	public PlainCJTSD query(String statisticsId, Map<String, String> parameters, String queryKey){
+	public PlainCJTSD query(String statisticsId, Map<String, String> parameters, String queryKey) throws ApiClientErrorException, ApiServerErrorException{
 		if (statisticsId == null){
 			statisticsId = defaultStatisticsId;
 		}
@@ -125,10 +137,7 @@ public class DataApiClient extends AbstractApiClient {
 			}
 		}
 		
-		ResponseEntity<ApiResponseBody<PlainCJTSD>> response = this.restTemplate.exchange(buildUri(builder), HttpMethod.GET, 
-				new HttpEntity<Object>(headers), RESPONSE_BODY_CJTSD);
-		PlainCJTSD cjtsd =response.getBody().getResult();
-		return cjtsd;
+		return get(buildUri(builder), headers, PlainCJTSD.class);
 	}
 	
 	public static class QueryParameters extends HashMap<String, String>{

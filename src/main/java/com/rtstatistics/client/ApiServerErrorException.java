@@ -11,17 +11,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpServerErrorException;
 
+import com.rtstatistics.client.model.ErrorDetail;
+
 /**
  * Exception thrown when an HTTP 5xx is received.
  * 
  * @author James Hu (Zhengmao Hu)
  *
  */
-public class ApiServerErrorException extends HttpServerErrorException implements ApiErrorInfoProvider{
+public class ApiServerErrorException extends HttpServerErrorException implements ErrorDetailSupplier{
 	private static final long serialVersionUID = -2649566403783674428L;
 	private static final Logger logger = LoggerFactory.getLogger(ApiServerErrorException.class);
 
-	protected ApiResponseBody.ErrorInfo error;
+	protected ErrorDetail error;
 	
 	/**
 	 * Construct a new instance of {@code ApiHttpServerErrorException} based on a
@@ -35,21 +37,24 @@ public class ApiServerErrorException extends HttpServerErrorException implements
 	public ApiServerErrorException(HttpStatus statusCode, String statusText, HttpHeaders responseHeaders,
 			byte[] responseBody, Charset responseCharset) {
 		super(statusCode, statusText, responseHeaders, responseBody, responseCharset);
-		populateErrorInfo(responseBody);
+		populateErrorInfo(statusCode, responseBody);
 	}
-
-	protected void populateErrorInfo(byte[] body){
+	
+	protected void populateErrorInfo(HttpStatus statusCode, byte[] body){
 		if (body != null){
 			try {
-				error = Jackson2.objectMapper.readValue(body, ApiResponseBody.class).getError();
+				error = Jackson2.objectMapper.readValue(body, ErrorDetail.class);
 			} catch (Exception e) {
-				logger.warn("Unabled to retrieve ErrorInfo: []", body);
+				logger.warn("Unabled to retrieve error detail: {}", body);
 			}
+		}
+		if (error == null){
+			error = new ErrorDetail(statusCode);
 		}
 	}
 
 	@Override
-	public ApiResponseBody.ErrorInfo getError() {
+	public ErrorDetail getError() {
 		return error;
 	}
 }

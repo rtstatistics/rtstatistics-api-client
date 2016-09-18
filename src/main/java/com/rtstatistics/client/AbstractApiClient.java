@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.http.client.HttpRequestRetryHandler;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
@@ -16,7 +15,6 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import net.sf.jabb.cjtsd.PlainCJTSD;
 import net.sf.jabb.spring.rest.AbstractRestClient;
 import net.sf.jabb.spring.rest.CustomResponseErrorHandler;
 import net.sf.jabb.util.parallel.BackoffStrategies;
@@ -31,12 +29,14 @@ import net.sf.jabb.util.parallel.WaitStrategies;
  *
  */
 class AbstractApiClient extends AbstractRestClient {
+	
+	public static final String QUERY_PARAM_API_KEY = "api_key";
+	
 	protected int retryMaxTimes = 10;
 	protected long retryIntervalStartMillis = 1000L;
 	protected int retryIntervalMaxSeconds = 60;
 	
-	static protected final ParameterizedTypeReference<ApiResponseBody<String[]>> RESPONSE_BODY_IDS = new ParameterizedTypeReference<ApiResponseBody<String[]>>(){};
-	static protected final ParameterizedTypeReference<ApiResponseBody<PlainCJTSD>> RESPONSE_BODY_CJTSD = new ParameterizedTypeReference<ApiResponseBody<PlainCJTSD>>(){};
+	//static protected final ParameterizedTypeReference<String[]> RESPONSE_BODY_IDS = new ParameterizedTypeReference<String[]>(){};
 
 	@Override
 	protected HttpRequestRetryHandler buildRequestRetryHandler(){

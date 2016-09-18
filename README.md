@@ -6,3 +6,8 @@
 This is the Java client for accessing rtstatistics.com API. 
 Both Data API and Management API are supported.
 Java 6+ environment is required for using the client.
+
+Mirrors:
+
+* On [coding.net](https://coding.net/u/james-hu/p/rtstatistics-api-client/)
+* On [GitHub](https://github.com/rtstatistics/rtstatistics-api-client)
