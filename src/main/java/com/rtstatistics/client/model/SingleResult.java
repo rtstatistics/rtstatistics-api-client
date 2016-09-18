@@ -28,7 +28,7 @@ public class SingleResult<T> implements Serializable{
 	
 	@Override
 	public String toString(){
-		return "(result: " + result == null ? "null" : result.toString() + ")";
+		return "(result: " + result + ")";
 	}
 
 	public T getResult() {
