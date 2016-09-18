@@ -109,6 +109,7 @@
 			<artifactId>httpclient</artifactId>
 			<version>4.5.2</version>
 		</dependency>
+		<!-- to work around JDK 6 compile bug -->
 		<dependency>
 			<groupId>io.fastjson</groupId>
 			<artifactId>boon</artifactId>

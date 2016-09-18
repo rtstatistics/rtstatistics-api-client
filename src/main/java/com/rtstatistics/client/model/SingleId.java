@@ -17,29 +17,31 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SingleKey implements Serializable{
-	private static final long serialVersionUID = 3603746618798635267L;
+public class SingleId implements Serializable{
+	private static final long serialVersionUID = -3544682325508203926L;
 
-	protected String key;
+	protected String id;
 	
-	public SingleKey(){
+	public SingleId(){
 		
 	}
 	
-	public SingleKey(String key){
-		this.key = key;
+	public SingleId(String id){
+		this.id = id;
 	}
 
 	@Override
 	public String toString(){
-		return "(key: " + key + ")";
-	}
-	
-	public String getKey() {
-		return key;
+		return "(id: " + id + ")";
 	}
 
-	public void setKey(String key) {
-		this.key = key;
+	public String getId() {
+		return id;
 	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+
 }
