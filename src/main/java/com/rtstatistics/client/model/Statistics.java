@@ -20,6 +20,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Statistics implements Serializable{
 	private static final long serialVersionUID = -1571952011399853165L;
+	
+	public static final String TIMESTAMP_PATTERN_EPOCH_MILLIS = "EPOCH_MILLIS";
+	public static final String TIMESTAMP_PATTERN_EPOCH_SECONDS = "EPOCH_SECONDS";
 
 	protected String id;
 	protected String name;
