@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 }) 
 @JsonIgnoreProperties(ignoreUnknown=true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Field implements Serializable{
+public abstract class Field implements Serializable{
 	private static final long serialVersionUID = 8590456018152520566L;
 
 	protected static final String TYPE_NATIVE = "native";
@@ -38,10 +38,10 @@ public class Field implements Serializable{
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 	
-	public Field(){
+	protected Field(String type){
 	}
 	
-	public Field(String name, String type) {
+	protected Field(String name, String type) {
 		this.name = name;
 		this.type = type;
 	}

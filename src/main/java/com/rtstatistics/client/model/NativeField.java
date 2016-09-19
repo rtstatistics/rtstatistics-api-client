@@ -11,7 +11,7 @@ public class NativeField extends Field{
 	protected String path;
 
 	public NativeField(){
-		super();
+		this(null, null);
 	}
 
 	public NativeField(String name, String path) {
