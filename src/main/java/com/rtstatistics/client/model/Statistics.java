@@ -8,6 +8,7 @@ import java.io.Serializable;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -20,6 +21,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Statistics implements Serializable{
 	private static final long serialVersionUID = -1571952011399853165L;
+	
+	public static final String TIMESTAMP_PATTERN_EPOCH_MILLIS = "EPOCH_MILLIS";
+	public static final String TIMESTAMP_PATTERN_EPOCH_SECONDS = "EPOCH_SECONDS";
 
 	protected String id;
 	protected String name;
@@ -106,6 +110,20 @@ public class Statistics implements Serializable{
 	}
 	public Statistics setKeyFields(String[][] keyFields) {
 		this.keyFields = keyFields;
+		return this;
+	}
+	
+	/**
+	 * Set key fields. Use this method when there is no interchangeable key fields.
+	 * @param keyFields	all key fields
+	 * @return	this
+	 */
+	@JsonIgnore
+	public Statistics setKeyFields(String... keyFields){
+		this.keyFields = new String[keyFields.length][];
+		for (int i = 0; i < keyFields.length; i ++){
+			this.keyFields[i] = new String[]{keyFields[i]};
+		}
 		return this;
 	}
 

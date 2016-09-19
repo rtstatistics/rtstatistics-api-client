@@ -11,7 +11,7 @@ public class CalculatedField extends Field{
 	protected String formula;
 	
 	public CalculatedField(){
-		super();
+		this(null, null);
 	}
 
 	public CalculatedField(String name, String formula) {

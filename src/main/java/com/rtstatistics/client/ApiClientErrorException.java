@@ -45,7 +45,7 @@ public class ApiClientErrorException extends HttpClientErrorException implements
 			try {
 				error = Jackson2.objectMapper.readValue(body, ErrorDetail.class);
 			} catch (Exception e) {
-				logger.warn("Unabled to retrieve error detail: {}", body);
+				logger.warn("Unabled to retrieve error detail: {}", body, e);
 			}
 		}
 		if (error == null){

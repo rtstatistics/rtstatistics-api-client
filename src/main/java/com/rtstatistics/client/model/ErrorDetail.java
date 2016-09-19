@@ -39,5 +39,31 @@ public class ErrorDetail implements Serializable{
 	public String toString(){
 		return "(" + incidentId + ", " + type + ": " + message + ")";
 	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getIncidentId() {
+		return incidentId;
+	}
+
+	public void setIncidentId(String incidentId) {
+		this.incidentId = incidentId;
+	}
+	
+	
 	
 }
