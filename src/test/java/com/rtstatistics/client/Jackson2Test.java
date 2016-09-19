@@ -15,6 +15,9 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.rtstatistics.client.model.CalculatedField;
+import com.rtstatistics.client.model.Field;
+import com.rtstatistics.client.model.NativeField;
 
 /**
  * @author James Hu (Zhengmao Hu)
@@ -82,4 +85,18 @@ public class Jackson2Test {
 		assertEquals("Me", o.getName());
 		assertEquals(Integer.valueOf(33), o.getAge());
 	}
+	
+	@Test
+	public void shouldRoundTripWithField() throws IOException{
+		NativeField nf = new NativeField("nativeName", "native.path");
+		CalculatedField cf = new CalculatedField("calcName", "a+b");
+		
+		NativeField nf2 = (NativeField) Jackson2.objectMapper.readValue(Jackson2.objectMapper.writeValueAsString(nf), Field.class);
+		assertEquals(nf.getName(), nf2.getName());
+		assertEquals(nf.getPath(), nf2.getPath());
+
+		CalculatedField cf2 = (CalculatedField) Jackson2.objectMapper.readValue(Jackson2.objectMapper.writeValueAsString(cf), Field.class);
+		assertEquals(cf.getName(), cf2.getName());
+		assertEquals(cf.getFormula(), cf2.getFormula());
+}
 }

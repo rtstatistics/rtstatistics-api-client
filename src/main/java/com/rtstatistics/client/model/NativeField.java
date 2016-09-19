@@ -11,11 +11,15 @@ public class NativeField extends Field{
 	protected String path;
 
 	public NativeField(){
-		this(null, null);
+		super();
+	}
+
+	public NativeField(String name) {
+		super(name);
 	}
 
 	public NativeField(String name, String path) {
-		super(name, Field.TYPE_NATIVE);
+		super(name);
 		this.path = path;
 	}
 

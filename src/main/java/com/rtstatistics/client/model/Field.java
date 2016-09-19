@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * @author James Hu (Zhengmao Hu)
  *
  */
-@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.WRAPPER_OBJECT, property="type")
+@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, property="type", include=JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({
 	@JsonSubTypes.Type(value=NativeField.class, name=Field.TYPE_NATIVE),
 	@JsonSubTypes.Type(value=CalculatedField.class, name=Field.TYPE_CALCULATED)
@@ -31,19 +31,17 @@ public abstract class Field implements Serializable{
 	protected static final String TYPE_CALCULATED = "calculated";
 	
 	protected String name;
-	protected String type;
 	
 	@Override
 	public String toString(){
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 	
-	protected Field(String type){
+	protected Field(){
 	}
 	
-	protected Field(String name, String type) {
+	protected Field(String name) {
 		this.name = name;
-		this.type = type;
 	}
 
 	public String getName() {
@@ -51,11 +49,5 @@ public abstract class Field implements Serializable{
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
 	}
 }
