@@ -8,6 +8,7 @@ import java.io.Serializable;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -109,6 +110,20 @@ public class Statistics implements Serializable{
 	}
 	public Statistics setKeyFields(String[][] keyFields) {
 		this.keyFields = keyFields;
+		return this;
+	}
+	
+	/**
+	 * Set key fields. Use this method when there is no interchangeable key fields.
+	 * @param keyFields	all key fields
+	 * @return	this
+	 */
+	@JsonIgnore
+	public Statistics setKeyFields(String... keyFields){
+		this.keyFields = new String[keyFields.length][];
+		for (int i = 0; i < keyFields.length; i ++){
+			this.keyFields[i] = new String[]{keyFields[i]};
+		}
 		return this;
 	}
 
