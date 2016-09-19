@@ -11,11 +11,15 @@ public class CalculatedField extends Field{
 	protected String formula;
 	
 	public CalculatedField(){
-		this(null, null);
+		super();
+	}
+
+	public CalculatedField(String name) {
+		super(name);
 	}
 
 	public CalculatedField(String name, String formula) {
-		super(name, Field.TYPE_CALCULATED);
+		super(name);
 		this.formula = formula;
 	}
 
