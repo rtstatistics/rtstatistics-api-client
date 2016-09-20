@@ -300,7 +300,11 @@ public class ManagementApiClient extends AbstractApiClient {
 	public Statistics[] getAllStatistics() throws ApiClientErrorException, ApiServerErrorException {
 		HttpHeaders headers = defaultNoContentHeaders;
 
-		return get("/statistics", headers, Statistics[].class);
+		Statistics[] statistics = get("/statistics", headers, Statistics[].class);
+		for (Statistics s: statistics){
+			s.normalizeAndSortKeyFields();
+		}
+		return statistics;
 	}
 
 	/**
@@ -313,7 +317,9 @@ public class ManagementApiClient extends AbstractApiClient {
 	public Statistics createStatistics(Statistics statistics) throws ApiClientErrorException, ApiServerErrorException {
 		HttpHeaders headers = defaultHeaders;
 
-		return post("/statistics", statistics, headers, Statistics.class);
+		Statistics s = post("/statistics", statistics, headers, Statistics.class);
+		s.normalizeAndSortKeyFields();
+		return s;
 	}
 
 	/**
@@ -338,7 +344,9 @@ public class ManagementApiClient extends AbstractApiClient {
 	public Statistics getStatistics(String id) throws ApiClientErrorException, ApiServerErrorException{
 		HttpHeaders headers = defaultNoContentHeaders;
 
-		return get("/statistics/" + id, headers, Statistics.class);
+		Statistics statistics = get("/statistics/" + id, headers, Statistics.class);
+		statistics.normalizeAndSortKeyFields();
+		return statistics;
 	}
 
 	/**
