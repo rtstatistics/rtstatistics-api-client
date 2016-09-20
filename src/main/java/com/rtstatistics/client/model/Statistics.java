@@ -4,11 +4,16 @@
 package com.rtstatistics.client.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -31,11 +36,99 @@ public class Statistics implements Serializable{
 	protected String periodsId;
 	protected Boolean includeCountDistinct;
 	protected String valueField;
-	protected String[][] keyFields;
+	protected Object[] keyFields;
 	protected String timestampFieldFormat;
 	protected String timestampFieldName;
 	protected String timestampFieldZone;
 
+	/**
+	 * Ensure that key fields is not an empty array (convert to null),
+	 * and does not contain Collections (convert to array). The normalized key fields 
+	 * will be null, or Object array containing possibly null, String, and String[].
+	 * @param keyFields		the key fields array to be normalized 
+	 */
+	static public void normalizeKeyFields(Object[] keyFields){
+		if (keyFields != null){
+			if (keyFields.length == 0){
+				keyFields = null;
+			}else{
+				for (int i = 0; i < keyFields.length; i ++){
+					Object o = keyFields[i];
+					if (o != null && !(o instanceof String) && !(o instanceof String[])){
+						if (o instanceof Collection){
+							Collection<?> c = (Collection<?>) o;
+							String[] o2 = new String[c.size()];
+							int j = 0;
+							for (Object e: c){
+								o2[j++] = e == null? null : e.toString();
+							}
+							keyFields[i] = o2;
+						}else if (o.getClass().isArray()){
+							Object[] c = (Object[]) o;
+							String[] o2 = new String[c.length];
+							int j = 0;
+							for (Object e: c){
+								o2[j++] = e == null? null : e.toString();
+							}
+							keyFields[i] = o2;
+						}else{
+							keyFields[i] = o.toString();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Sort key fields in asc order
+	 * @param keyFields		the key fields array to be sorted 
+	 */
+	@SuppressWarnings("unchecked")
+	static public void sortKeyFields(Object[] keyFields){
+		if (keyFields != null){
+			synchronized (keyFields){
+				Arrays.sort(keyFields, new Comparator<Object>(){
+					@Override
+					public int compare(Object o1, Object o2){
+						// assume there is no null
+						String s1;
+						String s2;
+						
+						if (o1 instanceof String[]){
+							Arrays.sort((String[])o1);
+							s1 = StringUtils.join((String[])o1);
+						}else if (o1 instanceof List){
+							Collections.sort((List)o1);
+							s1 = StringUtils.join(((List)o1).iterator(), "");
+						}else{
+							s1 = o1.toString();
+						}
+						
+						if (o2 instanceof String[]){
+							Arrays.sort((String[])o2);
+							s2 = StringUtils.join((String[])o2);
+						}else if (o2 instanceof List){
+							Collections.sort((List)o2);
+							s2 = StringUtils.join(((List)o2).iterator(), "");
+						}else{
+							s2 = o2.toString();
+						}
+						
+						return s1.compareTo(s2);
+					}
+				});
+			}
+		}
+	}
+
+	/**
+	 * Make sure that keyFields can only be null, or an array containing possibly null, String, or String[].
+	 */
+	public void normalizeAndSortKeyFields(){
+		normalizeKeyFields(keyFields);
+		sortKeyFields(keyFields);
+	}
 	
 	@Override
 	public String toString(){
@@ -105,26 +198,12 @@ public class Statistics implements Serializable{
 		this.valueField = valueField;
 		return this;
 	}
-	public String[][] getKeyFields() {
+	public Object[] getKeyFields() {
 		return keyFields;
 	}
-	public Statistics setKeyFields(String[][] keyFields) {
+	public Statistics setKeyFields(Object... keyFields) {
 		this.keyFields = keyFields;
 		return this;
 	}
 	
-	/**
-	 * Set key fields. Use this method when there is no interchangeable key fields.
-	 * @param keyFields	all key fields
-	 * @return	this
-	 */
-	@JsonIgnore
-	public Statistics setKeyFields(String... keyFields){
-		this.keyFields = new String[keyFields.length][];
-		for (int i = 0; i < keyFields.length; i ++){
-			this.keyFields[i] = new String[]{keyFields[i]};
-		}
-		return this;
-	}
-
 }
