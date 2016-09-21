@@ -46,8 +46,9 @@ public class Statistics implements Serializable{
 	 * and does not contain Collections (convert to array). The normalized key fields 
 	 * will be null, or Object array containing possibly null, String, and String[].
 	 * @param keyFields		the key fields array to be normalized 
+	 * @return The normalized key fields that may be null, or Object array containing possibly null, String, and String[].
 	 */
-	static public void normalizeKeyFields(Object[] keyFields){
+	static public Object[] normalizeKeyFields(Object[] keyFields){
 		if (keyFields != null){
 			if (keyFields.length == 0){
 				keyFields = null;
@@ -78,6 +79,7 @@ public class Statistics implements Serializable{
 				}
 			}
 		}
+		return keyFields;
 	}
 
 	/**
@@ -126,7 +128,7 @@ public class Statistics implements Serializable{
 	 * Make sure that keyFields can only be null, or an array containing possibly null, String, or String[].
 	 */
 	public void normalizeAndSortKeyFields(){
-		normalizeKeyFields(keyFields);
+		keyFields = normalizeKeyFields(keyFields);
 		sortKeyFields(keyFields);
 	}
 	
