@@ -3,7 +3,7 @@
 
 	<groupId>com.rtstatistics</groupId>
 	<artifactId>api-client</artifactId>
-	<version>1.0.8-SNAPSHOT</version>
+	<version>1.0.9-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>rtstatistics-api-client</name>
