@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.http.client.HttpRequestRetryHandler;
+import org.apache.http.conn.HttpClientConnectionManager;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
@@ -36,8 +37,15 @@ class AbstractApiClient extends AbstractRestClient {
 	protected long retryIntervalStartMillis = 1000L;
 	protected int retryIntervalMaxSeconds = 60;
 	
-	//static protected final ParameterizedTypeReference<String[]> RESPONSE_BODY_IDS = new ParameterizedTypeReference<String[]>(){};
-
+	public AbstractApiClient(){
+		super();
+	}
+	
+	@Override
+	protected HttpClientConnectionManager buildConnectionManager(){
+		return buildConnectionManager(null, null, "com/rtstatistics/client/bundle.crt", "com/rtstatistics/client/server.crt");
+	}
+	
 	@Override
 	protected HttpRequestRetryHandler buildRequestRetryHandler(){
 		return this.buildRequestRetryHandler(retryMaxTimes, true, true, true, 
