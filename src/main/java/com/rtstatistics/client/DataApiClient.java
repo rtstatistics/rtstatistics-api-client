@@ -58,33 +58,83 @@ public class DataApiClient extends AbstractApiClient {
 	/**
 	 * Send data item(s) to rtstatistics.com.
 	 * Default datasetId and API key set by {@link #setDefaultDatasetId(String)} and {@link #setDefaultSendKey(String)} will be used.
+	 * The server will respond after the data is sent to the internal processing queue but before it is successfully persisted in the queue.
+	 * This method provides better throughput but if you would like to guarantee that the data is successfully persisted therefore it will eventually get processed,
+	 * please use {@link #send(Object, boolean)} method with <code>sync</code> parameter set to <code>true</code>.
 	 * @param data			data item or data items (if it is an array or instance of Collection)
 	 * @return				IDs of the data items successfully appended to the dataset 
 	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
 	public String[] send(Object data) throws ApiClientErrorException, ApiServerErrorException{
-		return send(null, data, null);
+		return send(null, data, null, false);
 	}
 
 	/**
-	 * Send data item(s) to rtstatistics.com
-	 * @param datasetId		ID of the dataset, or null if the datasetId set by  {@link #setDefaultDatasetId(String)} should be used.
+	 * Send data item(s) to rtstatistics.com.
+	 * Default datasetId and API key set by {@link #setDefaultDatasetId(String)} and {@link #setDefaultSendKey(String)} will be used.
 	 * @param data			data item or data items (if it is an array or instance of Collection)
-	 * @param sendKey		API key for sending to the specified dataset, if it is null, 
-	 * 						API key set through {@link #setDefaultSendKey(String)} will be used.
-	 * @return				IDs of the data items successfully appended to the dataset 
+	 * @param sync			Whether the server should respond only after the data is successfully queued for processing
+	 * 	                	in which case the data is guaranteed to be processed eventually.
+	 * 	                	Setting this parameter to true is not recommended for high throughput scenarios but allows
+	 * 	                	the client to catch an ApiServerErrorException with status code 429 which would happen when
+	 * 	                	the client is sending data too fast.
+	 * 	                	If this parameter is set to false, the server will respond after
+	 * 	                	the data is sent to the internal processing queue but before it is successfully persisted in the queue.
+	 * @return				IDs of the data items successfully appended to the dataset
 	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
 	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
 	 */
-	public String[] send(String datasetId, Object data, String sendKey) throws ApiClientErrorException, ApiServerErrorException{
+	public String[] send(Object data, boolean sync) throws ApiClientErrorException, ApiServerErrorException{
+		return send(null, data, null, sync);
+	}
+
+	/**
+	 * Send data item(s) to rtstatistics.com.
+	 * The server will respond after the data is sent to the internal processing queue but before it is successfully persisted in the queue.
+	 * This method provides better throughput but if you would like to guarantee that the data is successfully persisted therefore it will eventually get processed,
+	 * please use {@link #send(String, Object, String, boolean)}  method with <code>sync</code> parameter set to <code>true</code>.
+	 * @param datasetId		ID of the dataset, or null if the datasetId set by  {@link #setDefaultDatasetId(String)} should be used.
+	 * @param data			data item or data items (if it is an array or instance of Collection)
+	 * @param sendKey		API key for sending to the specified dataset, if it is null,
+	 * 						API key set through {@link #setDefaultSendKey(String)} will be used.
+	 * @return				IDs of the data items successfully appended to the dataset
+	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
+	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
+	 */
+	public String[] send(String datasetId, Object data, String sendKey) throws ApiClientErrorException, ApiServerErrorException {
+		return send(datasetId, data, sendKey, false);
+	}
+
+	/**
+	 * Send data item(s) to rtstatistics.com.
+	 * @param datasetId		ID of the dataset, or null if the datasetId set by  {@link #setDefaultDatasetId(String)} should be used.
+	 * @param data			data item or data items (if it is an array or instance of Collection)
+	 * @param sendKey		API key for sending to the specified dataset, if it is null,
+	 * 						API key set through {@link #setDefaultSendKey(String)} will be used.
+	 * @param sync			Whether the server should respond only after the data is successfully queued for processing
+	 * 	                	in which case the data is guaranteed to be processed eventually.
+	 * 	                	Setting this parameter to true is not recommended for high throughput scenarios but allows
+	 * 	                	the client to catch an ApiServerErrorException with status code 429 which would happen when
+	 * 	                	the client is sending data too fast.
+	 * 	                	If this parameter is set to false, the server will respond after
+	 * 	                	the data is sent to the internal processing queue but before it is successfully persisted in the queue.
+	 * @return				IDs of the data items successfully appended to the dataset
+	 * @throws ApiClientErrorException	if the operation was not successful because of authentication, permission control, input validation, not found, rate limiting, or other issues.
+	 * @throws ApiServerErrorException	if the operation failed due to error happened on the server side.
+	 */
+	public String[] send(String datasetId, Object data, String sendKey, boolean sync) throws ApiClientErrorException, ApiServerErrorException{
 		if (datasetId == null){
 			datasetId = defaultDatasetId;
 		}
 		
 		HttpHeaders headers = sendKey == null ? defaultSendHeaders : buildHeaders(ACCEPT_AND_OFFER_JSON, sendKey);
-		
-		return post("/datasets/" + datasetId + "/items", data, headers, String[].class);
+
+		URIBuilder builder = uriBuilder("/datasets/" + datasetId + "/items");
+		if (sync) {
+			builder.addParameter("sync", "true");
+		}
+		return post(buildUri(builder), data, headers, String[].class);
 	}
 
 	/**
