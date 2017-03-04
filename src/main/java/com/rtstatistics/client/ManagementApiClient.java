@@ -8,7 +8,7 @@ import org.springframework.http.HttpHeaders;
 
 /**
  * Client for accessing rtstatistics.com Management API.
- * @see {@link AbstractApiClient} for default behaviors. 
+ * @see AbstractApiClient for default behaviors.
  *
  * @author James Hu (Zhengmao Hu)
  *
