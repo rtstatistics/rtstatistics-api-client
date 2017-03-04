@@ -14,7 +14,7 @@ import net.sf.jabb.cjtsd.PlainCJTSD;
 
 /**
  * Client for accessing rtstatistics.com Data API.
- * @see {@link AbstractApiClient} for default behaviors. 
+ * @see AbstractApiClient for default behaviors.
  *
  * @author James Hu (Zhengmao Hu)
  *
