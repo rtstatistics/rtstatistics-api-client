@@ -3,8 +3,8 @@
 
 # rtstatistics.com API Java Client
 
-This is the Java client for accessing rtstatistics.com API. 
-Both Data API and Management API are supported.
+This is the Java client for accessing [rtstatistics.com](http://www.rtstatistics.com) API. 
+Both [Data API and Management API](https://api.rtstatistics.com) are supported.
 Java 6+ environment is required for using the client.
 
 Mirrors:
