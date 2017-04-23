@@ -43,7 +43,12 @@ class AbstractApiClient extends AbstractRestClient {
 	
 	@Override
 	protected HttpClientConnectionManager buildConnectionManager(){
-		return buildConnectionManager(null, null, "com/rtstatistics/client/bundle.crt", "com/rtstatistics/client/server.crt");
+		return buildConnectionManager(null, null,
+				"com/rtstatistics/client/old_bundle.crt", "com/rtstatistics/client/old_server.crt",
+				"com/rtstatistics/client/api_bundle.crt", "com/rtstatistics/client/api_server.crt",
+				"com/rtstatistics/client/manage_bundle.crt", "com/rtstatistics/client/manage_server.crt",
+				"com/rtstatistics/client/processor_bundle.crt", "com/rtstatistics/client/processor_server.crt"
+				);
 	}
 	
 	@Override
